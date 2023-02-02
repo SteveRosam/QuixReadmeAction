@@ -2,9 +2,6 @@ name: "Quix Library readme importer"
 description: "Import readmes from the Quix Library into mkdocs"
 author: "Steve Rosam"
 inputs:
-  GIT_URL:
-    description: "Library git url"
-    required: true
   REPO_PATH:
     description: "Path to the repo"
     default: "./repo"

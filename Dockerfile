@@ -3,7 +3,6 @@ ADD . /app
 WORKDIR /app
 
 # We are installing a dependency here directly into our app source dir
-RUN pip install --target=/app gitpython
 RUN pip install --target=/app typing-extensions
 
 # A distroless container image with Python and some basics like SSL certificates

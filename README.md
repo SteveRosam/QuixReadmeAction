@@ -13,7 +13,6 @@ Use to add readme.md files from Quix Library to MKDocs
     - name: Quix Library readme importer
       uses: SteveRosam/QuixReadmeAction@Master
       with:
-        GIT_URL: "https://github.com/quixio/quix-library"
         REPO_PATH: "./repo"
         DOCS_PATH: "./docs"
         REPLACEMENT_PLACEHOLDER: "      - 'ConnectorsGetInsertedHere': ''"

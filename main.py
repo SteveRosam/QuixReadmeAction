@@ -1,4 +1,3 @@
-from git import Repo
 import os
 import traceback
 import shutil
@@ -8,7 +7,6 @@ from typing import List
 
 
 # get the environment variables
-git_url = os.environ.get("INPUT_GIT_URL")
 local_repo_path = os.environ["INPUT_REPO_PATH"]  # "./repo"
 path_to_docs = os.environ["INPUT_DOCS_PATH"]  # "./docs"
 nav_replacement_placeholder = os.environ["INPUT_REPLACEMENT_PLACEHOLDER"]  # "      - 'ConnectorsGetInsertedHere': ''"
@@ -170,15 +168,6 @@ def update_nav(nav_file_path, find_text, replacement_text):
 
 def main():
     try:
-
-        if os.path.isdir(local_repo_path):
-            # start from a clean position
-            shutil.rmtree(local_repo_path)
-
-        # clone the repo
-        print(f"::set-output name=messages::Cloning {git_url}")
-        Repo.clone_from(git_url, local_repo_path)
-
         library_file_dictionary = get_files(local_repo_path, 'library.json')
 
         # filter library files down to specific tag and value
