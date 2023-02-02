@@ -10,69 +10,23 @@ Use to add readme.md files from Quix Library to MKDocs
 ### Example workflow
 
 ```yaml
-name: My Workflow
-on: [push, pull_request]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
-    - name: Run action
-
-      # Put your action repo here
-      uses: me/myaction@master
-
-      # Put an example of your mandatory inputs here
+    - name: Quix Library readme importer
+      uses: SteveRosam/QuixReadmeAction@Master
       with:
-        myInput: world
+        GIT_URL: "https://github.com/quixio/quix-library"
+        REPO_PATH: "./repo"
+        DOCS_PATH: "./docs"
+        REPLACEMENT_PLACEHOLDER: "      - 'ConnectorsGetInsertedHere': ''"
+        README_DEST: "docs/docs/library_readmes/connectors"
 ```
 
 ### Inputs
 
-| Input                                             | Description                                        |
-|------------------------------------------------------|-----------------------------------------------|
-| `myInput`  | An example mandatory input    |
-| `anotherInput` _(optional)_  | An example optional input    |
 
 ### Outputs
 
-| Output                                             | Description                                        |
-|------------------------------------------------------|-----------------------------------------------|
-| `myOutput`  | An example output (returns 'Hello world')    |
-
 ## Examples
-
-> NOTE: People ❤️ cut and paste examples. Be generous with them!
 
 ### Using the optional input
 
-This is how to use the optional input.
-
-```yaml
-with:
-  myInput: world
-  anotherInput: optional
-```
-
 ### Using outputs
-
-Show people how to use your outputs in another action.
-
-```yaml
-steps:
-- uses: actions/checkout@master
-- name: Run action
-  id: myaction
-
-  # Put your action name here
-  uses: me/myaction@master
-
-  # Put an example of your mandatory arguments here
-  with:
-    myInput: world
-
-# Put an example of using your outputs here
-- name: Check outputs
-    run: |
-    echo "Outputs - ${{ steps.myaction.outputs.myOutput }}"
-```
