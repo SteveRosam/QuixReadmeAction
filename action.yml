@@ -4,7 +4,7 @@ author: "Steve Rosam"
 inputs:
   REPO_PATH:
     description: "Path to the repo"
-    default: "./repo"
+    default: "./library"
     required: true
   DOCS_PATH:
     description: "Path to docs"
