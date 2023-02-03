@@ -214,8 +214,8 @@ def main():
         #log(f"Nav replacement built\n {nav_replacement}")
 
 
-        log("files near end")
-        for path in Path("").iterdir():
+        log("docs files")
+        for path in Path(path_to_docs).iterdir():
             log(f"{path}")
 
         # get the nav file
