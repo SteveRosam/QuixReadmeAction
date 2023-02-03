@@ -167,7 +167,7 @@ def update_nav(nav_file_path, find_text, replacement_text):
 
 
 def log(name, value):
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+    with open(os.environ['GITHUB_ENV'], 'a') as fh:
         print(f'{name}={value}', file=fh)
 
 
@@ -175,7 +175,7 @@ def main():
     try:
 
         for path in Path("").iterdir():
-            log("messages", f"{path}")
+            log("MESSAGES", f"{path}")
 
         library_file_dictionary = get_files(library_repo_path, 'library.json')
 
@@ -204,24 +204,24 @@ def main():
         # join with new line
         nav_replacement.extend(sources_nav_replacement)
 
-        log("messages", f"Nav replacement built\n {nav_replacement}")
+        log("MESSAGES", f"Nav replacement built\n {nav_replacement}")
 
         # get the nav file
         nav_files = get_files(path_to_docs, 'mkdocs.yml')
         if len(nav_files) == 0:
             raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
-        log("messages", f"Updating nav file: {nav_files[0].full_path}")
+        log("MESSAGES", f"Updating nav file: {nav_files[0].full_path}")
 
         update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
         for path in Path("").iterdir():
             print(f"::set-output name=messages:: {path}")
-            log("messages", f"{path}")
+            log("MESSAGES", f"{path}")
 
     except Exception as e:
         print(f"Error\n {traceback.print_exc()}")
-        log("messages", f"Error\n {traceback.print_exc()}")
+        log("MESSAGES", f"Error\n {traceback.print_exc()}")
 
 
 if __name__ == "__main__":
