@@ -166,11 +166,16 @@ def update_nav(nav_file_path, find_text, replacement_text):
         file.write(file_data)
 
 
+def log(name, value):
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        print(f'{name}={value}', file=fh)
+
+
 def main():
     try:
 
         for path in Path("").iterdir():
-            print(f"::set-output name=messages:: {path}")
+            log("messages", f"{path}")
 
         library_file_dictionary = get_files(library_repo_path, 'library.json')
 
@@ -199,25 +204,24 @@ def main():
         # join with new line
         nav_replacement.extend(sources_nav_replacement)
 
-        print(f"::set-output name=messages::Nav replacement built\n {nav_replacement}")
+        log("messages", f"Nav replacement built\n {nav_replacement}")
 
         # get the nav file
         nav_files = get_files(path_to_docs, 'mkdocs.yml')
         if len(nav_files) == 0:
             raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
-        print(f"::set-output name=messages::Updating nav file: {nav_files[0].full_path}")
+        log("messages", f"Updating nav file: {nav_files[0].full_path}")
 
         update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
         for path in Path("").iterdir():
             print(f"::set-output name=messages:: {path}")
+            log("messages", f"{path}")
 
     except Exception as e:
-        print(f"::set-output name=messages::Error\n {traceback.print_exc()}")
-
-        #print("Deleting /repo folder")
-        #shutil.rmtree(local_repo_path)
+        print(f"Error\n {traceback.print_exc()}")
+        log("messages", f"Error\n {traceback.print_exc()}")
 
 
 if __name__ == "__main__":
