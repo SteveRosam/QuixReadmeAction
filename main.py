@@ -213,18 +213,21 @@ def main():
 
         #log(f"Nav replacement built\n {nav_replacement}")
 
+
+        log("files near end")
+        for path in Path("").iterdir():
+            log(f"{path}")
+
         # get the nav file
         nav_files = get_files(path_to_docs, 'mkdocs.yml')
         if len(nav_files) == 0:
+            log("mkdocs.yml not found")
             raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
         #log(f"Updating nav file: {nav_files[0].full_path}")
 
         update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
-        log("files at end")
-        for path in Path("").iterdir():
-            log(f"{path}")
 
     except Exception as e:
         print(f"Error: {traceback.print_exc()}")
