@@ -7,9 +7,9 @@ from typing import List
 
 
 # get the environment variables
-local_repo_path = os.environ["INPUT_REPO_PATH"]  # "./repo"
-path_to_docs = os.environ["INPUT_DOCS_PATH"]  # "./docs"
-nav_replacement_placeholder = os.environ["INPUT_REPLACEMENT_PLACEHOLDER"]  # "      - 'ConnectorsGetInsertedHere': ''"
+library_repo_path = os.environ["INPUT_LIBRARY_REPO_PATH"]  # "library"
+path_to_docs = os.environ["INPUT_DOCS_PATH"]  # "docs"
+nav_replacement_placeholder = os.environ["INPUT_REPLACEMENT_PLACEHOLDER"]  # "\n      - 'ConnectorsGetInsertedHere': ''"
 readme_destination = os.environ["INPUT_README_DEST"]  # "docs/docs/library_readmes/connectors"
 
 
@@ -145,10 +145,10 @@ def build_nav_dict(library_files: List[LibrayJsonFile]):
 
 def build_nav(nav_dict, section_title):
     nav_replacement_lines = []
-    nav_replacement_lines.append("      - '{}':".format(section_title))
+    nav_replacement_lines.append("        - '{}':".format(section_title))
     for n in nav_dict:
         path_to_readme = nav_dict[n]["readme"].replace("docs/", "")
-        nav_replacement_lines.append("        - '{}': '{}'".format(nav_dict[n]["name"], path_to_readme))
+        nav_replacement_lines.append("          - '{}': '{}'".format(nav_dict[n]["name"], path_to_readme))
     return nav_replacement_lines
 
 
@@ -169,10 +169,10 @@ def update_nav(nav_file_path, find_text, replacement_text):
 def main():
     try:
 
-        for path in Path("./").iterdir():
-            print(path)
+        for path in Path("").iterdir():
+            print(f"::set-output name=messages:: {path}")
 
-        library_file_dictionary = get_files(local_repo_path, 'library.json')
+        library_file_dictionary = get_files(library_repo_path, 'library.json')
 
         # filter library files down to specific tag and value
         tech_connector_library_files = get_library_item_with_tag(library_file_dictionary, "type", "Tech connectors")
@@ -182,37 +182,42 @@ def main():
 
         tech_readmes = copy_files(tech_readmes, readme_destination)
 
-        tags = {}
-        for f in tech_readmes:
-            lib_id = f.json["libraryItemId"]
-            tags[lib_id] = f.json["tags"]
-
         # generate the nav replacements
+        nav_replacement = []
+        nav_replacement.append("      - 'Connectors':")
+        nav_replacement.append("        - 'platform/connectors-index.md'")
+
         sources_nav_replacement = gen_nav_replacement(tech_readmes, "Sources", "Pipeline Stage", "Source")
         destinations_nav_replacement = gen_nav_replacement(tech_readmes, "Destinations", "Pipeline Stage", "Destination")
         technologies_nav_replacement = gen_nav_replacement(tech_readmes, "Technologies", "Technology", "")
 
-        # add them to the same array
-        sources_nav_replacement.extend(destinations_nav_replacement)
-        sources_nav_replacement.extend(technologies_nav_replacement)
+        # add them to the nav array
+        nav_replacement.extend(sources_nav_replacement)
+        nav_replacement.extend(destinations_nav_replacement)
+        nav_replacement.extend(technologies_nav_replacement)
 
         # join with new line
-        nav_replacement = "\n".join(sources_nav_replacement)
+        nav_replacement.extend(sources_nav_replacement)
 
         print(f"::set-output name=messages::Nav replacement built\n {nav_replacement}")
 
         # get the nav file
-        nav_file = get_files(path_to_docs, 'mkdocs.yml')
+        nav_files = get_files(path_to_docs, 'mkdocs.yml')
+        if len(nav_files) == 0:
+            raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
-        print(f"::set-output name=messages::Updating nav file: {nav_file[0].full_path}")
+        print(f"::set-output name=messages::Updating nav file: {nav_files[0].full_path}")
 
-        update_nav(nav_file[0].full_path, nav_replacement_placeholder, nav_replacement)
+        update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
+
+        for path in Path("").iterdir():
+            print(f"::set-output name=messages:: {path}")
 
     except Exception as e:
-        print("Error:")
-        print(traceback.print_exc())
-        print("Deleting /repo folder")
-        shutil.rmtree(local_repo_path)
+        print(f"::set-output name=messages::Error\n {traceback.print_exc()}")
+
+        #print("Deleting /repo folder")
+        #shutil.rmtree(local_repo_path)
 
 
 if __name__ == "__main__":

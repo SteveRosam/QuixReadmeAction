@@ -2,13 +2,13 @@ name: "Quix Library readme importer"
 description: "Import readmes from the Quix Library into mkdocs"
 author: "Steve Rosam"
 inputs:
-  REPO_PATH:
+  LIBRARY_REPO_PATH:
     description: "Path to the repo"
-    default: "./library"
+    default: "library"
     required: true
   DOCS_PATH:
     description: "Path to docs"
-    default: "./docs"
+    default: "docs"
     required: true
   REPLACEMENT_PLACEHOLDER:
     description: "MKDocs menu placeholder to be replaced"

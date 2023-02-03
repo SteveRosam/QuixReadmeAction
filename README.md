@@ -13,9 +13,9 @@ Use to add readme.md files from Quix Library to MKDocs
     - name: Quix Library readme importer
       uses: SteveRosam/QuixReadmeAction@Master
       with:
-        REPO_PATH: "./repo"
-        DOCS_PATH: "./docs"
-        REPLACEMENT_PLACEHOLDER: "      - 'ConnectorsGetInsertedHere': ''"
+        LIBRARY_REPO_PATH: "repo"
+        DOCS_PATH: "docs"
+        REPLACEMENT_PLACEHOLDER: "    - 'ConnectorsGetInsertedHere': ''"
         README_DEST: "docs/docs/library_readmes/connectors"
 ```
 
