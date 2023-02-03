@@ -168,6 +168,10 @@ def update_nav(nav_file_path, find_text, replacement_text):
 
 def main():
     try:
+
+        for path in Path("./").iterdir():
+            print(path)
+
         library_file_dictionary = get_files(local_repo_path, 'library.json')
 
         # filter library files down to specific tag and value
