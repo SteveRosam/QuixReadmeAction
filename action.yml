@@ -19,8 +19,8 @@ inputs:
     default: ""
     required: true
 outputs:
-  warnings:
-    description: "Output from the action"
+  logs:
+    description: "Log output from the action"
 runs:
   using: "docker"
   image: "Dockerfile"

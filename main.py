@@ -6,6 +6,8 @@ import json
 from typing import List
 
 
+logs = []
+
 # get the environment variables
 library_repo_path = os.environ["INPUT_LIBRARY_REPO_PATH"]  # "library"
 path_to_docs = os.environ["INPUT_DOCS_PATH"]  # "docs"
@@ -166,16 +168,21 @@ def update_nav(nav_file_path, find_text, replacement_text):
         file.write(file_data)
 
 
-def log(name, value):
-    with open(os.environ['GITHUB_ENV'], 'a') as fh:
-        print(f'{name}={value}', file=fh)
+def set_action_output(name: str, value: str):
+    with open(os.environ["GITHUB_OUTPUT"], "a") as fh:
+        fh.write(f"{name}={value}\n")
+
+
+def log(message):
+    logs.append(message)
 
 
 def main():
     try:
 
+        log("files at start")
         for path in Path("").iterdir():
-            log("MESSAGES", f"{path}")
+            log(f"{path}")
 
         library_file_dictionary = get_files(library_repo_path, 'library.json')
 
@@ -204,25 +211,26 @@ def main():
         # join with new line
         nav_replacement.extend(sources_nav_replacement)
 
-        log("MESSAGES", f"Nav replacement built\n {nav_replacement}")
+        log(f"Nav replacement built\n {nav_replacement}")
 
         # get the nav file
         nav_files = get_files(path_to_docs, 'mkdocs.yml')
         if len(nav_files) == 0:
             raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
-        log("MESSAGES", f"Updating nav file: {nav_files[0].full_path}")
+        log(f"Updating nav file: {nav_files[0].full_path}")
 
         update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
+        log("files at end")
         for path in Path("").iterdir():
-            print(f"::set-output name=messages:: {path}")
-            log("MESSAGES", f"{path}")
+            log(f"{path}")
 
     except Exception as e:
-        print(f"Error\n {traceback.print_exc()}")
-        log("MESSAGES", f"Error\n {traceback.print_exc()}")
-
+        print(f"Error: {traceback.print_exc()}")
+        log(f"Error: {traceback.print_exc()}")
+    finally:
+        set_action_output("logs", logs)
 
 if __name__ == "__main__":
     main()
