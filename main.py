@@ -197,7 +197,6 @@ def main():
 
         # generate the nav replacements
         nav_replacement = []
-        nav_replacement.append("        - 'platform/connectors-index.md'")
 
         sources_nav_replacement = gen_nav_replacement(tech_readmes, "Sources", "Pipeline Stage", "Source")
         destinations_nav_replacement = gen_nav_replacement(tech_readmes, "Destinations", "Pipeline Stage", "Destination")
@@ -216,7 +215,7 @@ def main():
         # join with new line
         nav_replacement.extend(sources_nav_replacement)
 
-        log(f"Nav replacement built\n [{nav_replacement}]")
+        #log(f"Nav replacement built\n [{nav_replacement}]")
 
 
         log("docs files")
