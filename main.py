@@ -86,6 +86,7 @@ def replace_chr(value):
 def copy_files(files, target_dir):
 
     if not os.path.exists(target_dir + "/"):
+        log(f"copy_files:: {target_dir} does not exist. Creating..")
         os.makedirs(os.path.dirname(target_dir + "/"), exist_ok=True)
 
     for file in files:
@@ -196,7 +197,6 @@ def main():
 
         # generate the nav replacements
         nav_replacement = []
-        nav_replacement.append("      - 'Connectors':")
         nav_replacement.append("        - 'platform/connectors-index.md'")
 
         sources_nav_replacement = gen_nav_replacement(tech_readmes, "Sources", "Pipeline Stage", "Source")
