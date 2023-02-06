@@ -148,13 +148,13 @@ def build_nav_dict(library_files: List[LibrayJsonFile]):
 
 def build_nav(nav_dict, section_title):
     nav_replacement_lines = []
-    nav_title_indentation = 6 # spaces
+    nav_title_indentation = 6  # spaces
     spaces = ""
     spaces += ' ' * nav_title_indentation
 
     log(f"Adding nav entries for '{section_title}'")
 
-    line = f"f{spaces}- '{section_title}':"
+    line = f"{spaces}- '{section_title}':"
     log(line)
     nav_replacement_lines.append(line)
     for n in nav_dict:
@@ -222,11 +222,7 @@ def main():
         nav_replacement.extend(destinations_nav_replacement)
         # nav_replacement.extend(technologies_nav_replacement)
 
-        # join with new line
-        nav_replacement.extend(sources_nav_replacement)
-
         # log(f"Nav replacement built\n [{nav_replacement}]")
-
 
         log("docs files")
         for path in Path("docs").iterdir():
@@ -242,16 +238,18 @@ def main():
 
         log(f"Yaml file path: {nav_files[0].full_path}")
 
+        # join with new line
         n = "\n".join(nav_replacement)
         log(f"Nav replacement string: {n}")
-        update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
+        update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
     except Exception as e:
         print(f"Error: {traceback.print_exc()}")
         log(f"Error: {traceback.print_exc()}")
     finally:
         set_action_output("logs", logs)
+
 
 if __name__ == "__main__":
     main()
