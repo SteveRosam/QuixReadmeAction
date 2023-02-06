@@ -215,7 +215,7 @@ def main():
 
 
         log("docs files")
-        for path in Path(path_to_docs).iterdir():
+        for path in Path("docs").iterdir():
             log(f"{path}")
 
         # get the nav file
@@ -225,6 +225,8 @@ def main():
             raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
         #log(f"Updating nav file: {nav_files[0].full_path}")
+
+        log(f"Yaml file path: {nav_files[0].full_path}")
 
         update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
