@@ -148,10 +148,20 @@ def build_nav_dict(library_files: List[LibrayJsonFile]):
 
 def build_nav(nav_dict, section_title):
     nav_replacement_lines = []
-    nav_replacement_lines.append("        - '{}':".format(section_title))
+    nav_title_indentation = 6 # spaces
+    spaces = ""
+    spaces += ' ' * nav_title_indentation
+
+    log(f"Adding nav entries for '{section_title}'")
+
+    line = f"f{spaces}- '{section_title}':"
+    log(line)
+    nav_replacement_lines.append(line)
     for n in nav_dict:
         path_to_readme = nav_dict[n]["readme"].replace("docs/", "")
-        nav_replacement_lines.append("          - '{}': '{}'".format(nav_dict[n]["name"], path_to_readme))
+        line = f"{spaces}  - '{nav_dict[n]['name']}': '{path_to_readme}'"
+        log(line)
+        nav_replacement_lines.append(line)
     return nav_replacement_lines
 
 
@@ -215,7 +225,7 @@ def main():
         # join with new line
         nav_replacement.extend(sources_nav_replacement)
 
-        #log(f"Nav replacement built\n [{nav_replacement}]")
+        # log(f"Nav replacement built\n [{nav_replacement}]")
 
 
         log("docs files")
@@ -228,10 +238,12 @@ def main():
             log("mkdocs.yml not found")
             raise Exception(f"mkdocs.yml not found in {path_to_docs}")
 
-        #log(f"Updating nav file: {nav_files[0].full_path}")
+        # log(f"Updating nav file: {nav_files[0].full_path}")
 
         log(f"Yaml file path: {nav_files[0].full_path}")
 
+        n = "\n".join(nav_replacement)
+        log(f"Nav replacement string: {n}")
         update_nav(nav_files[0].full_path, nav_replacement_placeholder, "\n".join(nav_replacement))
 
 
