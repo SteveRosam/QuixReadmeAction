@@ -191,10 +191,6 @@ def log(message):
 def main():
     try:
 
-        log("files at start")
-        for path in Path("").iterdir():
-            log(f"{path}")
-
         library_file_dictionary = get_files(library_repo_path, 'library.json')
 
         # filter library files down to specific tag and value
@@ -210,6 +206,7 @@ def main():
 
         sources_nav_replacement = gen_nav_replacement(tech_readmes, "Sources", "Pipeline Stage", "Source")
         destinations_nav_replacement = gen_nav_replacement(tech_readmes, "Destinations", "Pipeline Stage", "Destination")
+
         # to have the technologies category or any other category that might repeat readmes
         # (or use readmes for a second or 3rd time)
         # we'd have to determine the categories first, then find the readme to go with it,
@@ -223,10 +220,6 @@ def main():
         # nav_replacement.extend(technologies_nav_replacement)
 
         # log(f"Nav replacement built\n [{nav_replacement}]")
-
-        log("docs files")
-        for path in Path("docs").iterdir():
-            log(f"{path}")
 
         # get the nav file
         nav_files = get_files(path_to_docs, 'mkdocs.yml')
